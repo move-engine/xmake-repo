@@ -8,15 +8,16 @@ package("move")
 
     -- Keep each SDK version tied to the exact Move source revision that
     -- contains its Xmake facade, runtime, and modules.
-    add_versions("0.1.0", "b7236c4219b03c1e6b5dac7631ce498094451251")
+    add_versions("0.1.0", "4e2580eb43cd6772f608f8311fd197669f0d15a8")
 
     on_install(function (package)
         local project = package:installdir("includes", "move", "project")
         os.cp("xmake/addon/includes/move/project/xmake.lua", project)
-        os.cp("xmake/addon/toolchains", package:installdir("toolchains"))
+        os.cp("xmake/addon/toolchains/move_ucrt64_gcc",
+            package:installdir("toolchains", "move_ucrt64_gcc"))
 
         local sdk = path.join(project, "sdk")
-        os.cp("xmake", sdk)
+        os.cp("xmake", path.join(sdk, "xmake"))
         os.cp("runtime", sdk)
         os.cp("common", sdk)
         os.cp("toolchain.toml", sdk)
