@@ -20,6 +20,7 @@ package("move")
         os.cp("xmake", path.join(sdk, "xmake"))
         os.cp("runtime", sdk)
         os.cp("common", sdk)
+        os.cp("app_host", sdk)
         os.cp("toolchain.toml", sdk)
     end)
 
@@ -28,5 +29,7 @@ package("move")
             "includes", "project", "xmake.lua")))
         assert(os.isfile(package:installdir(
             "includes", "project", "sdk", "xmake", "project.lua")))
+        assert(os.isfile(package:installdir(
+            "includes", "project", "sdk", "app_host", "main.cpp")))
         assert(package:has_addon({toolchains = "move_ucrt64_gcc"}))
     end)
