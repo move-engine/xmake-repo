@@ -8,7 +8,7 @@ package("move")
 
     -- Keep each SDK version tied to the exact Move source revision that
     -- contains its Xmake facade, runtime, and modules.
-    add_versions("0.1.0", "29821cfb20771ca13e13b1f92c4095e937ff4a5a")
+    add_versions("0.1.0", "9684d08a87420acd46e598f9d335a4be2580f79a")
 
     on_install(function (package)
         local project = package:installdir("includes", "project")
