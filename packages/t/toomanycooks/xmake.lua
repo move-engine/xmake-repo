@@ -6,6 +6,7 @@ package("toomanycooks")
 
     add_urls("https://github.com/move-engine/TooManyCooks.git")
     add_versions("1.7.0", "a0e17c9cbda0d369788617230e5e027f5097758e")
+    add_versions("1.7.0-move.1", "7c8f6010821f5003efa1f387570fb004fd2349eb")
 
     add_configs("hwloc", {
         description = "Enable TooManyCooks hwloc integration",
