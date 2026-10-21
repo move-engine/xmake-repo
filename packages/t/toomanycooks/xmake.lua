@@ -6,6 +6,7 @@ package("toomanycooks")
 
     add_urls("https://github.com/move-engine/TooManyCooks.git")
     add_versions("1.7.0", "a0e17c9cbda0d369788617230e5e027f5097758e")
+    add_versions("1.7.0-move.1", "c9965d9b84ab61e9ffacb6eced34386700164d04")
 
     add_configs("hwloc", {
         description = "Enable TooManyCooks hwloc integration",
@@ -89,4 +90,31 @@ package("toomanycooks")
             #include <tmc/all_headers.hpp>
             static void test() { (void)sizeof(tmc::task<int>); }
         ]]}, {configs = {languages = "c++20"}}))
+
+        if package:version_str() == "1.7.0-move.1" then
+            assert(package:check_cxxsnippets({notification = [[
+                #ifdef TMC_STANDALONE_COMPILATION
+                #define TMC_IMPL
+                #endif
+                #include <tmc/all_headers.hpp>
+                static void notify(void* userdata) noexcept {
+                    ++*static_cast<unsigned*>(userdata);
+                }
+                int main() {
+                    unsigned notifications = 0;
+                    tmc::ex_manual_st executor;
+                    executor.set_post_notification(&notify, &notifications);
+                    executor.init();
+                    tmc::post(executor, [] {});
+                    const bool ran = executor.run_one();
+                    executor.teardown();
+                    return notifications == 1 && ran ? 0 : 1;
+                }
+            ]]}, {
+                configs = {languages = "c++20"},
+                tryrun = not package:is_cross(),
+                -- Also force a link check when target code cannot run here.
+                binary_match = function () return true end
+            }))
+        end
     end)
